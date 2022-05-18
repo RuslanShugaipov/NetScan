@@ -11,41 +11,7 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine("Enter port: ");
-            //int port = Int32.Parse(Console.ReadLine());
-
-            //try
-            //{
-            //    var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            //    socket.Bind(new IPEndPoint(0, port));
-            //    socket.Listen(5);
-
-            //    while (true)
-            //    {
-            //        var listener = socket.Accept();
-            //        var buffer = new byte[256];
-            //        var size = 0;
-            //        var data = new StringBuilder();
-            //        do
-            //        {
-            //            size = listener.Receive(buffer);
-            //            data.Append(Encoding.UTF8.GetString(buffer, 0, size));
-            //        } while (listener.Available > 0);
-
-            //        Console.WriteLine(data);
-
-            //        listener.Send(Encoding.UTF8.GetBytes("Success"));
-
-            //        listener.Shutdown(SocketShutdown.Both);
-            //        listener.Close();
-            //    }
-            //}
-            //catch(Exception ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //}
-
-            Console.WriteLine("Enter port: ");
+            Console.WriteLine("Введите порт: ");
             int port = Int32.Parse(Console.ReadLine());
             List<ClientInfo> nodes = scan();
 
@@ -53,29 +19,33 @@ namespace Server
             {
                 if (nodes[i].Status == true)
                 {
-                    IPEndPoint ipPoint = new IPEndPoint(0, port);
-                    Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     try
                     {
-                        listenSocket.Bind(ipPoint);
-                        listenSocket.Listen(1);
+                        IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(nodes[i].Address), port);
+                        Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                        socket.Connect(ipPoint);
+                        string message = "Запрос конфигурации.";
+                        byte[] data = Encoding.UTF8.GetBytes(message);
+                        socket.Send(data);
 
-                        Socket handler = listenSocket.Accept();
+                        data = new byte[256];
                         StringBuilder builder = new StringBuilder();
                         int bytes = 0;
-                        byte[] data = new byte[256];
+
                         do
                         {
-                            bytes = handler.Receive(data);
-                            builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
-                        } while (builder.Length == 0);
+                            bytes = socket.Receive(data, data.Length, 0);
+                            builder.Append(Encoding.UTF8.GetString(data, 0, bytes));
+                        }
+                        while (builder.Length == 0);
 
-                        handler.Send(Encoding.UTF8.GetBytes("Data recevied."));
+                        string[] configuration = builder.ToString().Split(new char[] { '|' });
 
-                        Console.WriteLine(builder.ToString());
+                        nodes[i].Name = configuration[0];
+                        nodes[i].OS = configuration[1];
 
-                        handler.Shutdown(SocketShutdown.Both);
-                        handler.Close();
+                        socket.Shutdown(SocketShutdown.Both);
+                        socket.Close();
 
                     }
                     catch (Exception ex)
@@ -85,6 +55,7 @@ namespace Server
                 }
                 Console.WriteLine(nodes[i].ToString());
             }
+            Console.WriteLine("Сканирование завершено.");
             Console.ReadKey();
         }
 
@@ -98,8 +69,8 @@ namespace Server
 
                 for (int i = 1; i <= 10; ++i)
                 {
+                    if (i == 2) continue;
                     string ipAddress = "192.168.8." + i;
-
 
                     ping = new Ping();
                     try
@@ -113,14 +84,7 @@ namespace Server
 
                     if (reply.Status == IPStatus.Success)
                     {
-                        try
-                        {
-                            nodes.Add(new ClientInfo(ipAddress, true));
-                        }
-                        catch
-                        {
-                            nodes.Add(new ClientInfo(ipAddress, true));
-                        }
+                        nodes.Add(new ClientInfo(ipAddress, true));
                     }
                     else
                     {

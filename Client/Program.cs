@@ -9,77 +9,46 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine("Enter port: ");
-            //int port = Int32.Parse(Console.ReadLine());
-            //Console.WriteLine("Enter ip: ");
-            //string ip = Console.ReadLine();
-            ////const string ip = "169.254.204.28";
-
-            //var ipEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
-            //var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-            //Console.WriteLine("Enter message:");
-            //var message = Console.ReadLine();
-
-            //var data = Encoding.UTF8.GetBytes(message);
-
-            //socket.Connect(ipEndPoint);
-            //socket.Send(data);
-
-            //var buffer = new byte[256];
-            //var size = 0;
-            //var answer = new StringBuilder();
-
-            //do
-            //{
-            //    size = socket.Receive(buffer);
-            //    answer.Append(Encoding.UTF8.GetString(buffer, 0, size));
-            //} while (socket.Available > 0);
-
-            //Console.WriteLine(answer.ToString());
-
-            //socket.Shutdown(SocketShutdown.Both);
-            //socket.Close();
-
-            //Console.ReadLine();
-
-
-
-            Console.WriteLine("Enter port: ");
+            Console.WriteLine("Введите порт: ");
             int port = Int32.Parse(Console.ReadLine());
-            //Console.WriteLine("Enter ip: ");
-            //string ip = Console.ReadLine();
-            string ip = "192.168.8.3";
+
+            IPEndPoint ipPoint = new IPEndPoint(0, port);
+            Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             try
             {
-                IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(ip), port);
-                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                socket.Connect(ipPoint);
-                string msg = $"{Environment.MachineName} {Environment.OSVersion.Platform}";
-                byte[] data = Encoding.Unicode.GetBytes(msg);
-                Console.WriteLine(msg);
-                socket.Send(data);
+                listenSocket.Bind(ipPoint);
+                listenSocket.Listen(5);
 
-                var buffer = new byte[256];
-                var size = 0;
-                var answer = new StringBuilder();
-                do
+                while (true)
                 {
-                    size = socket.Receive(buffer);
-                    answer.Append(Encoding.UTF8.GetString(buffer, 0, size));
-                } while (socket.Available > 0);
+                    Console.WriteLine("Ожидание.\n");
+                    Socket handler = listenSocket.Accept();
+                    StringBuilder builder = new StringBuilder();
+                    int bytes = 0;
+                    byte[] data = new byte[256];
+                    do
+                    {
+                        bytes = handler.Receive(data);
+                        builder.Append(Encoding.UTF8.GetString(data, 0, bytes));
+                        if (builder.ToString() == "Запрос конфигурации.")
+                            break;
+                    } while (true);
 
-                Console.WriteLine(answer.ToString());
+                    Console.WriteLine("Запрос на конфигурацию получен.");
+                    string message = $"{Environment.MachineName}|{Environment.OSVersion.Platform}";
+                    data = Encoding.UTF8.GetBytes(message);
+                    handler.Send(data);
+                    Console.WriteLine("Конфигурация отправлена.\n");
 
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
+                    handler.Shutdown(SocketShutdown.Both);
+                    handler.Close();
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            Console.Read();
         }
     }
 }

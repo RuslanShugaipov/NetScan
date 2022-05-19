@@ -59,23 +59,27 @@ namespace ServerWinForms
             this.os,
             this.status});
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 12);
+            this.listView1.Location = new System.Drawing.Point(46, 12);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(598, 344);
+            this.listView1.Size = new System.Drawing.Size(520, 344);
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
             // 
             // ip
             // 
             this.ip.Text = "IP-адрес";
+            this.ip.Width = 120;
             // 
             // name
             // 
             this.name.Text = "Имя компьютера";
+            this.name.Width = 140;
             // 
             // os
             // 
             this.os.Text = "Операционная система";
+            this.os.Width = 200;
             // 
             // status
             // 

@@ -29,6 +29,7 @@ namespace ServerWinForms
 
         private void button1_Click(object sender, EventArgs e)
         {
+            listView1.Items.Clear();
             nodes = scan();
 
             for (int i = 0; i < nodes.Count; ++i)
@@ -70,15 +71,14 @@ namespace ServerWinForms
                     }
                 }
                 Console.WriteLine(nodes[i].ToString());
-                ListViewItem lvi = new ListViewItem();
-                ListViewItem.ListViewSubItem lvsi = new ListViewItem.ListViewSubItem();
-                listView1.Items[0].SubItems.Add(nodes[i].Address);
-                listView1.Items[1].SubItems.Add(nodes[i].Name);
-                listView1.Items[2].SubItems.Add(nodes[i].OS);
+                ListViewItem lvi = new ListViewItem(nodes[i].Address);
+                lvi.SubItems.Add(nodes[i].Name);
+                lvi.SubItems.Add(nodes[i].OS);
                 if (nodes[i].Status)
-                    listView1.Items[3].SubItems.Add("up");
+                    lvi.SubItems.Add("up");
                 else
-                    listView1.Items[3].SubItems.Add("down");
+                    lvi.SubItems.Add("down");
+                listView1.Items.Add(lvi);
             }
         }
 
@@ -92,7 +92,6 @@ namespace ServerWinForms
 
                 for (int i = 1; i <= 10; ++i)
                 {
-                    if (i == 2) continue;
                     string ipAddress = "192.168.8." + i;
 
                     ping = new Ping();

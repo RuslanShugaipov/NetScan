@@ -69,7 +69,6 @@ namespace Server
 
                 for (int i = 1; i <= 10; ++i)
                 {
-                    if (i == 2) continue;
                     string ipAddress = "192.168.8." + i;
 
                     ping = new Ping();

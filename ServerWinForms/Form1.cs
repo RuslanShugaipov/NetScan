@@ -16,6 +16,7 @@ namespace ServerWinForms
     {
         List<ClientInfo> nodes;
         int port = 8088;
+        static string localIP = "";
 
         public Form1()
         {
@@ -69,16 +70,15 @@ namespace ServerWinForms
                     {
                         Console.WriteLine(ex.Message);
                     }
+                    ListViewItem lvi = new ListViewItem(nodes[i].Address);
+                    lvi.SubItems.Add(nodes[i].Name);
+                    lvi.SubItems.Add(nodes[i].OS);
+                    if (nodes[i].Status)
+                        lvi.SubItems.Add("up");
+                    else
+                        lvi.SubItems.Add("down");
+                    listView1.Items.Add(lvi);
                 }
-                Console.WriteLine(nodes[i].ToString());
-                ListViewItem lvi = new ListViewItem(nodes[i].Address);
-                lvi.SubItems.Add(nodes[i].Name);
-                lvi.SubItems.Add(nodes[i].OS);
-                if (nodes[i].Status)
-                    lvi.SubItems.Add("up");
-                else
-                    lvi.SubItems.Add("down");
-                listView1.Items.Add(lvi);
             }
         }
 
@@ -89,15 +89,19 @@ namespace ServerWinForms
             {
                 Ping ping;
                 PingReply reply;
+                int index = localIP.LastIndexOf(".");
+                string localNetAddress = localIP.Substring(0, index + 1);
+                int localPCNumber = Int32.Parse(localIP.Split(new char[] { '.' })[3]);
 
                 for (int i = 1; i <= 10; ++i)
                 {
-                    string ipAddress = "192.168.8." + i;
+                    if (i == localPCNumber) continue;
+                    string ipAddress = localNetAddress + i;
 
                     ping = new Ping();
                     try
                     {
-                        reply = ping.Send(ipAddress, 300);
+                        reply = ping.Send(ipAddress, 100);
                     }
                     catch
                     {
@@ -124,6 +128,11 @@ namespace ServerWinForms
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             port = Int32.Parse(textBox1.Text);
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            localIP = textBox2.Text;
         }
     }
 }

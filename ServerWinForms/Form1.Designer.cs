@@ -37,13 +37,15 @@ namespace ServerWinForms
             this.status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.Window;
             this.button1.Font = new System.Drawing.Font("Arial", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(488, 382);
+            this.button1.Location = new System.Drawing.Point(632, 373);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(122, 39);
             this.button1.TabIndex = 0;
@@ -59,9 +61,9 @@ namespace ServerWinForms
             this.os,
             this.status});
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(46, 12);
+            this.listView1.Location = new System.Drawing.Point(30, 12);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(520, 344);
+            this.listView1.Size = new System.Drawing.Size(724, 344);
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -99,15 +101,35 @@ namespace ServerWinForms
             // 
             this.textBox1.Location = new System.Drawing.Point(12, 390);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 22);
+            this.textBox1.Size = new System.Drawing.Size(82, 22);
             this.textBox1.TabIndex = 3;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(123, 390);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(143, 22);
+            this.textBox2.TabIndex = 4;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.SystemColors.Control;
+            this.label2.Location = new System.Drawing.Point(120, 368);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(318, 17);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "IP-адрес вашего компьютера в локальной сети";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(622, 433);
+            this.ClientSize = new System.Drawing.Size(782, 433);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listView1);
@@ -130,6 +152,8 @@ namespace ServerWinForms
         private System.Windows.Forms.ColumnHeader status;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label2;
     }
 }
 

@@ -36,7 +36,7 @@ namespace Client
                     } while (true);
 
                     Console.WriteLine("Запрос на конфигурацию получен.");
-                    string message = $"{Environment.MachineName}|{Environment.OSVersion.Platform}";
+                    string message = $"{Environment.MachineName}|{Environment.OSVersion.VersionString}";
                     data = Encoding.UTF8.GetBytes(message);
                     handler.Send(data);
                     Console.WriteLine("Конфигурация отправлена.\n");

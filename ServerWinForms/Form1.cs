@@ -13,6 +13,7 @@ namespace ServerWinForms
     {
         static List<ClientInfo> nodes = new List<ClientInfo>();
         static int port = 8091;
+        static string localIP = "";
         static ListView lv;
         static ProgressBar pb;
         static TextBox tb3;

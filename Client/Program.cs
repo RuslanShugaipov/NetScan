@@ -2,7 +2,6 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Net;
-using System.Net.NetworkInformation;
 
 namespace Client
 {
@@ -10,8 +9,9 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Введите порт: ");
-            int port = Int32.Parse(Console.ReadLine());
+            //Console.WriteLine("Введите порт: ");
+            //int port = Int32.Parse(Console.ReadLine());
+            int port = 8091;
 
             IPEndPoint ipPoint = new IPEndPoint(0, port);
             Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
